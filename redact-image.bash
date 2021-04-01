@@ -5,7 +5,7 @@ set -e
 ME='redact-image.bash'
 
 function usage {
-	print "Usage: $ME image_file [image_file ...]"
+	echo "Usage: $ME image_file [image_file ...]"
 }
 
 function help {
@@ -37,6 +37,11 @@ og_args="$@"
 error_count=0
 while [[ $# -gt 0 ]]
 do
+	if [[ "$1" == '-h' || "$1" == '--help' ]]
+	then
+		help && exit 0
+	fi
+
 	if ! [[ -e "$1" ]]
 	then
 		echo "error: '$1' file does not exist" 1>&2
