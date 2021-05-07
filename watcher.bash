@@ -38,10 +38,9 @@ fi
 
 
 find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $FILE_LISTING_PREV
-echo '' > $FILE_LISTING_PREV
 while true
 do
-	find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $FILE_LISTING_NOW
+	find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $FILE_LISTgit aING_NOW
 
 	if diff $FILE_LISTING_PREV $FILE_LISTING_NOW &> /dev/null
 	then
