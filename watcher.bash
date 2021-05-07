@@ -36,11 +36,15 @@ then
 	exit 3
 fi
 
-
+set +e
 find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $FILE_LISTING_PREV
+set -e
+
 while true
 do
-	find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $FILE_LISTgit aING_NOW
+	set +e
+	find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $FILE_LISTING_NOW
+	set -e
 
 	if diff $FILE_LISTING_PREV $FILE_LISTING_NOW &> /dev/null
 	then
@@ -52,7 +56,9 @@ do
 		| sed -e 's/^> //g' \
 		| xargs ./redact-image.bash
 
+		set +e
 		find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $FILE_LISTING_PREV
+		set -e
 	fi
 
 	echo "$ME: watching \`$watch_dir' for new image files to redact. (^C to interrupt)"
