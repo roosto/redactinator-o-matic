@@ -8,6 +8,7 @@ TEMP_FILE_NOW="$(mktemp -t "$ME")" || exit 1
 
 WATCH_INTERVAL_IN_SECONDS=15
 
+# was script invoked correctly?
 if [[ $# -ne 1 ]]
 then
 	if [[ $# -eq 0 ]]
@@ -21,8 +22,19 @@ then
 	exit 1
 fi
 
+# is cli arg is valid?
+watch_dir="$1"
+if ! [[ -d $watch_dir ]]
+then
+	echo "$ME: error: \`$watch_dir' is not a directory" 1>&2
+	exit 2
+fi
 
-
+if ! [[ -r $watch_dir ]]
+then
+	echo "$ME: error: \`$watch_dir' is not readable" 1>&2
+	exit 3
+fi
 
 watch_dir="$1"
 
