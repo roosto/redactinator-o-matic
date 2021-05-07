@@ -8,6 +8,22 @@ TEMP_FILE_NOW="$(mktemp -t "$ME")" || exit 1
 
 WATCH_INTERVAL_IN_SECONDS=15
 
+if [[ $# -ne 1 ]]
+then
+	if [[ $# -eq 0 ]]
+	then
+		echo "$ME: error: missing watch_dir argument" 1>&2
+	else
+		echo "$ME: error: too many arguments" 1>&2
+	fi
+
+	echo "Usage: $ME watch_dir" 1>&2
+	exit 1
+fi
+
+
+
+
 watch_dir="$1"
 
 find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $TEMP_FILE_PREV
