@@ -45,6 +45,7 @@ echo -n '' > $TEMP_FILE_PREV # DEBUG: make diff show all files as new
 find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $TEMP_FILE_NOW
 
 while true
+do
 	if diff $TEMP_FILE_PREV $TEMP_FILE_NOW &> /dev/null
 	then
 		sleep $WATCH_INTERVAL_IN_SECONDS
