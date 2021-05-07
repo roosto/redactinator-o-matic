@@ -3,8 +3,8 @@
 set -e
 
 ME="$(basename $0)"
-TEMP_FILE_PREV="$(mktemp -t "$ME")" || exit 1
-TEMP_FILE_NOW="$(mktemp -t "$ME")" || exit 1
+TEMP_FILE_PREV="$(mktemp -t "$ME")"
+TEMP_FILE_NOW="$(mktemp -t "$ME")"
 
 WATCH_INTERVAL_IN_SECONDS=15
 
@@ -36,25 +36,24 @@ then
 	exit 3
 fi
 
-watch_dir="$1"
 
 find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $TEMP_FILE_PREV
-
-echo -n '' > $TEMP_FILE_PREV # DEBUG: make diff show all files as new
-
-find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $TEMP_FILE_NOW
-
+echo '' > $TEMP_FILE_PREV
 while true
 do
+	find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $TEMP_FILE_NOW
+
 	if diff $TEMP_FILE_PREV $TEMP_FILE_NOW &> /dev/null
 	then
 		sleep $WATCH_INTERVAL_IN_SECONDS
 	else
 		diff $TEMP_FILE_PREV $TEMP_FILE_NOW \
-		 | grep '^> ' \
-		 | tee diff.out \
-		 | sed -e 's/^> //g' \
-		 | xargs ./redact-image.bash
+		| grep '^> ' \
+		| tee diff.out \
+		| sed -e 's/^> //g' \
+		| xargs ./redact-image.bash
+
+		find $watch_dir -type f | egrep -e '/[a-f0-9]{32}.' > $TEMP_FILE_PREV
 	fi
 
 	echo "$ME: watching \`$watch_dir' for new image files to redact. (^C to interrupt)"
